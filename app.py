@@ -1,6 +1,7 @@
 import streamlit as st
-import pyttsx3
-import subprocess
+from gtts import gTTS
+import os
+from tempfile import NamedTemporaryFile
 
 
 st.set_page_config(page_title="🗣️ Text to Speech App", layout="centered")
@@ -37,31 +38,36 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # --- Get Voice Options ---
-engine_preview = pyttsx3.init()
-voices = engine_preview.getProperty('voices')
-voice_map = {f"{'Male' if 'male' in v.name.lower() else 'Female'} - {v.name}": v.id for v in voices}
+# engine_preview = pyttsx3.init()
+# voices = engine_preview.getProperty('voices')
+# voice_map = {f"{'Male' if 'male' in v.name.lower() else 'Female'} - {v.name}": v.id for v in voices}
 
 
 st.sidebar.image("side.webp")
 # --- Sidebar Voice Options ---
+st.sidebar.image("https://cdn-icons-png.flaticon.com/512/3884/3884421.png", width=120)
 st.sidebar.header("🎙️ Voice Settings")
-selected_voice = st.sidebar.selectbox("Choose Voice", list(voice_map.keys()))
-rate = st.sidebar.slider("Speech Rate", 100, 250, 150)
+language = st.sidebar.selectbox("🌐 Language", ["en", "ur", "fr", "es", "de"], index=0)
+slow = st.sidebar.checkbox("🐢 Slow Mode", value=False)
+st.sidebar.markdown("Choose your language and speed.")
+st.sidebar.markdown("---")
 
 # --- Main Input ---
 st.subheader("📝 Enter Text Below")
-text_input = st.text_area("Type something to convert into speech", height=200)
+default_text = "Hello, this is a demo of the text-to-speech application built using Python and Streamlit."
+text_input = st.text_area("Type something...", value=default_text, height=200)
 
+# --- Speak Button ---
 if st.button("🔊 Speak"):
     if text_input.strip():
-        with st.spinner("Speaking..."):
-            # Escape double quotes in text
-            safe_text = text_input.replace('"', '\\"')
-            command = f'python speak.py --text "{safe_text}" --voice "{voice_map[selected_voice]}" --rate {rate}'
-            subprocess.Popen(command, shell=True)
-        st.success("✅ Done! Text is being spoken.")
+        with st.spinner("Generating speech..."):
+            tts = gTTS(text=text_input, lang=language, slow=slow)
+            with NamedTemporaryFile(delete=False, suffix=".mp3") as tmpfile:
+                tts.save(tmpfile.name)
+                st.success("✅ Speech generated!")
+                st.audio(tmpfile.name, format="audio/mp3")
     else:
-        st.warning("⚠️ Please enter some text before clicking 'Speak'.")
+        st.warning("⚠️ Please enter some text before speaking.")
 
 
 st.markdown("---")
