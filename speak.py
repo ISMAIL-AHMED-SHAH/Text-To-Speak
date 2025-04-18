@@ -1,5 +1,4 @@
-# speak.py
-import sys
+
 import pyttsx3
 
 def speak(text, voice_id=None, rate=150):

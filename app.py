@@ -1,7 +1,6 @@
 import streamlit as st
 import pyttsx3
 import subprocess
-import os
 
 
 st.set_page_config(page_title="🗣️ Text to Speech App", layout="centered")
@@ -10,12 +9,12 @@ st.set_page_config(page_title="🗣️ Text to Speech App", layout="centered")
 st.markdown("""
     <style>
     textarea {
-        border: 2px solid #4CAF50 !important;
+        border: 2px solid #45B7D1 !important;
         border-radius: 5px !important;
     }
 
     .stButton > button {
-        background-color: #4CAF68 !important;
+        background-color: #45B7D1  !important;
         color: white !important;
         font-weight: bold;
         border-radius: 8px;
@@ -23,16 +22,17 @@ st.markdown("""
     }
 
     .stButton > button:hover {
-        background-color: #45a049 !important;
+        background-color: #ebadee  !important;
         transition: 0.3s;
     }
     </style>
 """, unsafe_allow_html=True)
 
+st.image("image.png", use_container_width=True)
 
 # --- Banner ---
 st.markdown("""
-    <h1 style='text-align: center; color: #4CAF50;'>🗣️ Text to Speech Web App</h1>
+    <h1 style='text-align: center; color: #eeadd2;'>🗣️ Text to Speech Web App</h1>
     <p style='text-align: center;'>Convert your thoughts into speech in seconds!</p>
 """, unsafe_allow_html=True)
 
@@ -41,6 +41,8 @@ engine_preview = pyttsx3.init()
 voices = engine_preview.getProperty('voices')
 voice_map = {f"{'Male' if 'male' in v.name.lower() else 'Female'} - {v.name}": v.id for v in voices}
 
+
+st.sidebar.image("side.webp")
 # --- Sidebar Voice Options ---
 st.sidebar.header("🎙️ Voice Settings")
 selected_voice = st.sidebar.selectbox("Choose Voice", list(voice_map.keys()))
@@ -60,6 +62,7 @@ if st.button("🔊 Speak"):
         st.success("✅ Done! Text is being spoken.")
     else:
         st.warning("⚠️ Please enter some text before clicking 'Speak'.")
+
 
 st.markdown("---")
 st.sidebar.info("💡 Tip: You can try quotes, affirmations, or tongue-twisters!")
