@@ -1,6 +1,6 @@
 
-# 🗣️ Text-to-Speech Web App (Day 23 - 30DaysOfCodeChallenge)
-
+# 🗣️ Text-to-Speech Web App
+--
 A simple and elegant Text-to-Speech converter built using **Python**, **Streamlit**, and **gTTS**.  
 Easily convert your thoughts into speech in multiple languages, with options to slow down the pace.
 
